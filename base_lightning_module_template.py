@@ -1,9 +1,12 @@
 import torch
 from torch.optim import lr_scheduler
 import pytorch_lightning as pl
+from optimizers.over9000 import RangerLars
 
 
 class BaseModel(pl.LightningModule):
+    lr = 1e-3
+
     def __init__(self):
         super(BaseModel, self).__init__()
 
@@ -16,7 +19,7 @@ class BaseModel(pl.LightningModule):
         raise NotImplementedError()
 
     def configure_optimizers(self):
-        optimizer = torch.optim.Adam(self.parameters(), lr=1e-3)
+        optimizer = RangerLars(self.parameters(), self.lr)
         scheduler = lr_scheduler.StepLR(optimizer, step_size=7, gamma=0.1)
 
         return [optimizer], [scheduler]

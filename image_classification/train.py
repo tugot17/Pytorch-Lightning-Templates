@@ -4,10 +4,10 @@ from pytorch_lightning import Trainer
 from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.loggers import TensorBoardLogger
 
-from image_classification_datamodule import ImageClassificationDatamodule
+from image_classification.image_classification_datamodule import ImageClassificationDatamodule
 import albumentations as A
 
-from image_classifier_lightning_module import ImageClassifier
+from image_classification.image_classifier_lightning_module import ImageClassifier
 
 TENSORBOARD_DIRECTORY = "logs/"
 pl.seed_everything(42)

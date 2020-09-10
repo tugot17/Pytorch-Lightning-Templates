@@ -3,7 +3,7 @@ import pytorch_lightning as pl
 from albumentations.pytorch import ToTensorV2
 from torch.utils.data import DataLoader
 
-from image_dataset import AlbumentationsDataset
+from image_classification.image_dataset import AlbumentationsDataset
 
 
 class ImageClassificationDatamodule(pl.LightningDataModule):

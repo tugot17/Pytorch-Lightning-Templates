@@ -5,8 +5,12 @@ from torch import nn
 import torchvision.models as models
 import pytorch_lightning as pl
 
+from optimizers.over9000 import RangerLars
+
 
 class ImageClassifier(pl.LightningModule):
+    lr = 1e-3
+
     def __init__(self):
         super(ImageClassifier, self).__init__()
 
@@ -23,7 +27,7 @@ class ImageClassifier(pl.LightningModule):
         return self.model(x)
 
     def configure_optimizers(self):
-        optimizer = torch.optim.Adam(self.parameters(), lr=1e-3)
+        optimizer = RangerLars(self.lr)
         scheduler = lr_scheduler.StepLR(optimizer, step_size=7, gamma=0.1)
 
         return [optimizer], [scheduler]
