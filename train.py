@@ -4,7 +4,7 @@ from pytorch_lightning import Trainer
 from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.loggers import TensorBoardLogger
 
-from datamodule import ImageClassificationDataset
+from image_classification_datamodule import ImageClassificationDatamodule
 import albumentations as A
 
 from image_classifier_lightning_module import ImageClassifier
@@ -36,7 +36,7 @@ if __name__ == '__main__':
         ToTensorV2()
     ])
 
-    dm = ImageClassificationDataset(16, train_transform, val_transform)
+    dm = ImageClassificationDatamodule(16, train_transform, val_transform)
 
     model = ImageClassifier()
 

@@ -1,21 +1,16 @@
 import torch
 from torch.optim import lr_scheduler
-from torch import nn
 import pytorch_lightning as pl
 
 
-class ImageClassifier(pl.LightningModule):
+class BaseModel(pl.LightningModule):
     def __init__(self):
-        super(ImageClassifier, self).__init__()
+        super(BaseModel, self).__init__()
 
         self.criterion = ...
         self.metrics = {}
 
         self.model = ...
-
-        self.num_ftrs = self.model.fc.in_features
-        self.number_of_classes = 2
-        self.model.fc = nn.Linear(self.num_ftrs, self.number_of_classes)
 
     def forward(self, x):
         raise NotImplementedError()

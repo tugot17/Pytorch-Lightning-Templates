@@ -1,6 +1,7 @@
 from torch.utils.data import Dataset
 
-class ObjectDetectionDataset(Dataset):
+
+class BaseDataset(Dataset):
 
     def __init__(self):
         pass
@@ -10,4 +11,3 @@ class ObjectDetectionDataset(Dataset):
 
     def __len__(self):
         pass
-
