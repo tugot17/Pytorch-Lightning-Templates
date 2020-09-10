@@ -19,6 +19,10 @@ class ImageClassifier(pl.LightningModule):
 
         self.model = models.resnet50(pretrained=True)
 
+        ## Only the last layer is trained
+        # for p in self.model.parameters():
+        #     p.requires_grad = False
+
         self.num_ftrs = self.model.fc.in_features
         self.number_of_classes = 2
         self.model.fc = nn.Linear(self.num_ftrs, self.number_of_classes)

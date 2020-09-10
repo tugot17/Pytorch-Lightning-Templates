@@ -1,3 +1,5 @@
+import os
+
 from albumentations.pytorch import ToTensorV2
 import pytorch_lightning as pl
 from pytorch_lightning import Trainer
@@ -9,7 +11,6 @@ import albumentations as A
 
 from image_classification.image_classifier_lightning_module import ImageClassifier
 
-TENSORBOARD_DIRECTORY = "logs/"
 pl.seed_everything(42)
 
 if __name__ == '__main__':
@@ -41,28 +42,30 @@ if __name__ == '__main__':
     model = ImageClassifier()
 
     #Fast run first
-    trainer = Trainer(gpus=1, fast_dev_run=True)
+    trainer = Trainer(gpus=1, fast_dev_run=True, checkpoint_callback=False)
     trainer.fit(model, dm)
 
     checkpoint_callback = ModelCheckpoint(
-        filepath='model/',
-        save_top_k=2,
+        filepath=os.getcwd(),
+        save_top_k=1,
         verbose=True,
         monitor='val_loss',
         mode='min',
     )
 
-    logger = TensorBoardLogger(TENSORBOARD_DIRECTORY, name="faster_rcnn")
+    TENSORBOARD_DIRECTORY = "logs/"
+    EXPERIMENT_NAME = "resnet_50"
+    logger = TensorBoardLogger(TENSORBOARD_DIRECTORY, name=EXPERIMENT_NAME)
 
     #And then actual training
-    trainer = Trainer(max_epochs=40,
+    trainer = Trainer(max_epochs=10,
                       logger=logger,
                       gpus=1,
                       # precision=16,
                       accumulate_grad_batches=4,
                       deterministic=True,
                       early_stop_callback=True,
-                      # resume_from_checkpoint = 'model/my_checkpoint.ckpt'
+                      # resume_from_checkpoint = 'my_checkpoint.ckpt'
                       )
 
     trainer.fit(model, dm)

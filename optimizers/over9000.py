@@ -1,4 +1,5 @@
 # RAdam + LARS + LookAHead
+#https://github.com/mgrankin/over9000
 
 # Lookahead implementation from https://github.com/lonePatient/lookahead_pytorch/blob/master/optimizer.py
 # RAdam + LARS implementation from https://gist.github.com/redknightlois/c4023d393eb8f92bb44b2ab582d7ec20
