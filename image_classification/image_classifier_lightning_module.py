@@ -12,7 +12,7 @@ class ImageClassifier(pl.LightningModule):
     lr = 1e-3
 
     def __init__(self):
-        super(ImageClassifier, self).__init__()
+        super().__init__()
 
         self.criterion = nn.CrossEntropyLoss()
         self.metrics = {"accuracy": Accuracy(), "recall": Recall()}
@@ -27,7 +27,7 @@ class ImageClassifier(pl.LightningModule):
         return self.model(x)
 
     def configure_optimizers(self):
-        optimizer = RangerLars(self.lr)
+        optimizer = RangerLars(self.parameters(), self.lr)
         scheduler = lr_scheduler.StepLR(optimizer, step_size=7, gamma=0.1)
 
         return [optimizer], [scheduler]
