@@ -12,6 +12,8 @@ def preprocess_mask(mask):
 
 
 class ImageSegmentationDataset(Dataset):
+    #https://github.com/qubvel/segmentation_models.pytorch/blob/master/examples/cars%20segmentation%20(camvid).ipynb
+    
     # CLASSES = ['sky', 'building', 'pole', 'road', 'pavement',
     #            'tree', 'signsymbol', 'fence', 'car',
     #            'pedestrian', 'bicyclist', 'unlabelled']
