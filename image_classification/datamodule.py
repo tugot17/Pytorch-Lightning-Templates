@@ -3,7 +3,7 @@ import pytorch_lightning as pl
 from albumentations.pytorch import ToTensorV2
 from torch.utils.data import DataLoader
 
-from image_classification.dataset import AlbumentationsDataset
+from image_classification.dataset import ImageClassificationDataset
 
 
 class ImageClassificationDatamodule(pl.LightningDataModule):
@@ -14,13 +14,13 @@ class ImageClassificationDatamodule(pl.LightningDataModule):
         self.val_transform = val_transform
 
     def setup(self, stage=None):
-        self.train_set = AlbumentationsDataset(
+        self.train_set = ImageClassificationDataset(
             file_paths=['./images/image_1.jpg', './images/image_2.jpg', './images/image_3.jpg'],
             labels=[1, 2, 3],
             transform=self.train_transform,
         )
 
-        self.val_set = AlbumentationsDataset(
+        self.val_set = ImageClassificationDataset(
             file_paths=['./images/image_1.jpg', './images/image_2.jpg', './images/image_3.jpg'],
             labels=[1, 2, 3],
             transform=self.val_transform,

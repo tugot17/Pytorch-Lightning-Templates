@@ -1,14 +1,14 @@
 import os
 
 from albumentations.pytorch import ToTensorV2
+import albumentations as A
+
 import pytorch_lightning as pl
 from pytorch_lightning import Trainer
 from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.loggers import TensorBoardLogger
 
 from image_classification.datamodule import ImageClassificationDatamodule
-import albumentations as A
-
 from image_classification.lightning_module import ImageClassifier
 
 pl.seed_everything(42)

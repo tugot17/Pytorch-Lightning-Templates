@@ -4,11 +4,12 @@ import albumentations as A
 from albumentations.pytorch import ToTensorV2
 
 
-class AlbumentationsDataset(Dataset):
-    def __init__(self, file_paths, labels, transform=None):
+class ImageClassificationDataset(Dataset):
+    def __init__(self, file_paths, labels, transform=None, classes=[]):
         self.file_paths = file_paths
         self.labels = labels
         self.transform = transform
+        self.classes = classes
 
     def __len__(self):
         return len(self.file_paths)
@@ -38,7 +39,7 @@ if __name__ == '__main__':
         ToTensorV2()
     ])
 
-    albumentations_dataset = AlbumentationsDataset(
+    albumentations_dataset = ImageClassificationDataset(
         file_paths=['./images/image_1.jpg', './images/image_2.jpg', './images/image_3.jpg'],
         labels=[1, 2, 3],
         transform=albumentations_transform,
