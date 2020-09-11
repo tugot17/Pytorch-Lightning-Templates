@@ -6,10 +6,10 @@ from pytorch_lightning import Trainer
 from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.loggers import TensorBoardLogger
 
-from image_classification.image_classification_datamodule import ImageClassificationDatamodule
+from image_classification.datamodule import ImageClassificationDatamodule
 import albumentations as A
 
-from image_classification.image_classifier_lightning_module import ImageClassifier
+from image_classification.lightning_module import ImageClassifier
 
 pl.seed_everything(42)
 
@@ -58,13 +58,14 @@ if __name__ == '__main__':
     logger = TensorBoardLogger(TENSORBOARD_DIRECTORY, name=EXPERIMENT_NAME)
 
     #And then actual training
-    trainer = Trainer(max_epochs=10,
+    trainer = Trainer(max_epochs=40,
                       logger=logger,
                       gpus=1,
                       # precision=16,
                       accumulate_grad_batches=4,
                       deterministic=True,
                       early_stop_callback=True,
+                      checkpoint_callback=checkpoint_callback,
                       # resume_from_checkpoint = 'my_checkpoint.ckpt'
                       )
 
