@@ -10,27 +10,51 @@ def preprocess_mask(mask):
     mask[(mask == 1.0) | (mask == 3.0)] = 1.0
     return mask
 
-class OxfordPetDataset(Dataset):
-    def __init__(self, images_filenames, images_directory, masks_directory, transform=None):
-        self.images_filenames = images_filenames
-        self.images_directory = images_directory
-        self.masks_directory = masks_directory
-        self.transform = transform
 
-    def __len__(self):
-        return len(self.images_filenames)
+class ImageSegmentationDataset(Dataset):
+    # CLASSES = ['sky', 'building', 'pole', 'road', 'pavement',
+    #            'tree', 'signsymbol', 'fence', 'car',
+    #            'pedestrian', 'bicyclist', 'unlabelled']
 
-    def __getitem__(self, idx):
-        image_filename = self.images_filenames[idx]
-        image = cv2.imread(os.path.join(self.images_directory, image_filename))
+    CLASSES = ["pet"]
+
+    def __init__(
+            self,
+            images_dir,
+            masks_dir,
+            classes=None,
+            augmentation=None,
+    ):
+        self.ids = os.listdir(images_dir)
+        self.images_fps = [os.path.join(images_dir, image_id) for image_id in self.ids]
+        self.masks_fps = [os.path.join(masks_dir, image_id) for image_id in self.ids]
+
+        # convert str names to class values on masks
+        self.class_values = [self.CLASSES.index(cls.lower()) for cls in classes]
+
+        self.transform = augmentation
+
+    def __getitem__(self, i):
+
+        # read data
+        image = cv2.imread(self.images_fps[i])
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        mask = cv2.imread(
-            os.path.join(self.masks_directory, image_filename.replace(".jpg", ".png")), cv2.IMREAD_UNCHANGED,
-        )
+        mask = cv2.imread(self.masks_fps[i], 0)
+
         mask = preprocess_mask(mask)
-        if self.transform is not None:
+
+        # # extract certain classes from mask (e.g. cars)
+        # masks = [(mask == v) for v in self.class_values]
+        # mask = np.stack(masks, axis=-1).astype('float')
+
+        # apply augmentations
+        if self.transform:
             transformed = self.transform(image=image, mask=mask)
             image = transformed["image"]
             mask = transformed["mask"]
             mask = mask.unsqueeze(0)
+
         return image, mask
+
+    def __len__(self):
+        return len(self.ids)

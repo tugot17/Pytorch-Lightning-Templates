@@ -5,7 +5,7 @@ from optimizers.over9000 import RangerLars
 import segmentation_models_pytorch as smp
 
 
-class BaseModel(pl.LightningModule):
+class ImageSegmentator(pl.LightningModule):
     lr = 1e-3
 
     def __init__(self):
@@ -15,7 +15,7 @@ class BaseModel(pl.LightningModule):
         self.metrics = {"IoU": smp.utils.metrics.IoU(threshold=0.5),
                         "FScore": smp.utils.metrics.Fscore()}
 
-        self.model = smp.Unet('resnet34', encoder_weights='imagenet', in_channels=3, classes=1)
+        self.model = smp.Unet('resnet50', encoder_weights='imagenet', in_channels=3, classes=1)
 
     def forward(self, x):
         return self.model(x)
