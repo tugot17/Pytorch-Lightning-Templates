@@ -1,5 +1,4 @@
-from mantisshrimp.all import *
-from mantisshrimp.models.rcnn import faster_rcnn
+from icevision.all import *
 import pandas as pd
 
 from object_detection.parser import ArtifactParser

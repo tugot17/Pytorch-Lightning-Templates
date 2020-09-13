@@ -1,4 +1,4 @@
-from mantisshrimp.all import *
+from icevision.all import *
 import os
 import pytorch_lightning as pl
 from pytorch_lightning import Trainer
@@ -28,7 +28,7 @@ if __name__ == '__main__':
 
 
     #Fast run first
-    trainer = Trainer(gpus=1, fast_dev_run=True, checkpoint_callback=False)
+    trainer = Trainer(gpus=1, fast_dev_run=True, checkpoint_callback=False, logger=False)
     trainer.fit(light_model, dm)
 
     checkpoint_callback = ModelCheckpoint(

@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 from typing import List, Union
-from mantisshrimp.all import parsers, IDMap, ClassMap, BBox
+from icevision.all import parsers, IDMap, ClassMap, BBox
 
 
 class ArtifactParser(parsers.FasterRCNN, parsers.FilepathMixin, parsers.SizeMixin):

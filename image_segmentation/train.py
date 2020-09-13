@@ -35,7 +35,7 @@ if __name__ == '__main__':
     model = ImageSegmentator()
 
     #Fast run first
-    trainer = Trainer(gpus=1, fast_dev_run=True, checkpoint_callback=False)
+    trainer = Trainer(gpus=1, fast_dev_run=True, checkpoint_callback=False, logger=False)
 
     checkpoint_callback = ModelCheckpoint(
         filepath=os.getcwd(),
