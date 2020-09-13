@@ -1,0 +1,3 @@
+image_id,label,width,height,bbox,img_path
+00005885_000.png,Port,1024,1024,"[262.0, 355.0, 365.0, 435.0]",/home/piotr/Desktop/Nih-Chest-X-Ray-Artifacts-Annotations/utils/../images_003/images/00005885_000.png
+00005776_009.png,Necklace,1024,1024,"[386.0, 1.0, 696.0, 216.0]",/home/piotr/Desktop/Nih-Chest-X-Ray-Artifacts-Annotations/utils/../images_003/images/00005776_009.png

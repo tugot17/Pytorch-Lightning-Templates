@@ -10,7 +10,7 @@ class ArtifactsDetectionDataModule(pl.LightningDataModule):
 
         self.batch_size = batch_size
 
-        df = pd.read_csv("atrifacts_dataset_with_paths.csv")
+        df = pd.read_csv("dataframe.csv")
         data_splitter = RandomSplitter([.8, .2], seed=42)
 
         self.parser = ArtifactParser(df)
