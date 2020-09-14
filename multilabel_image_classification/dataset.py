@@ -6,9 +6,9 @@ import json
 
 class MultiLabelImageClassificationDataset(Dataset):
     def __init__(self, df, transform=None, classes=[]):
-        self.paths = df["path"].tolist()
+        self.paths = df["Path"].tolist()
 
-        self.labels = df["label"].tolist()
+        self.labels = df["Label"].tolist()
         self.labels = list(map(lambda row: json.loads(row), self.labels))
         self.labels = torch.tensor(self.labels, dtype=torch.float)
 
@@ -16,7 +16,7 @@ class MultiLabelImageClassificationDataset(Dataset):
         self.classes = classes
 
     def __len__(self):
-        return len(self.file_paths)
+        return len(self.paths)
 
     def __getitem__(self, idx):
         label = self.labels[idx]
