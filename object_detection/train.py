@@ -9,8 +9,6 @@ from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 
 from .datamodule import ArtifactsDetectionDataModule
 
-pl.seed_everything(42)
-
 
 class LightModel(faster_rcnn.lightning.ModelAdapter):
     lr = 1e-3
