@@ -6,13 +6,12 @@ import albumentations as A
 import pytorch_lightning as pl
 from pytorch_lightning import Trainer
 from pytorch_lightning.callbacks import ModelCheckpoint
-from pytorch_lightning.loggers import TensorBoardLogger
+from pytorch_lightning.callbacks.early_stopping import EarlyStopping
+from pytorch_lightning.loggers import WandbLogger
 
 from .compute_class_weight import pos_weight
 from .datamodule import MultiLabelImageClassificationDatamodule
 from .lightning_module import MultiLabelImageClassifier
-
-pl.seed_everything(42)
 
 if __name__ == "__main__":
     val_transform = A.Compose(

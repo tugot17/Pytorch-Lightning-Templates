@@ -13,8 +13,6 @@ from albumentations.pytorch import ToTensorV2
 from .datamodule import ImageSegmentationDatamodule
 from .lightning_module import ImageSegmentator
 
-pl.seed_everything(42)
-
 if __name__ == "__main__":
     train_transform = A.Compose(
         [
