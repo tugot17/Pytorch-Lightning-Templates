@@ -23,24 +23,30 @@ class ImageClassificationDataset(Dataset):
 
         if self.transform:
             augmented = self.transform(image=image)
-            image = augmented['image']
+            image = augmented["image"]
         return image, label
 
 
-if __name__ == '__main__':
-    albumentations_transform = A.Compose([
-        A.Resize(256, 256),
-        A.RandomCrop(224, 224),
-        A.HorizontalFlip(),
-        A.Normalize(
-            mean=[0.485, 0.456, 0.406],
-            std=[0.229, 0.224, 0.225],
-        ),
-        ToTensorV2()
-    ])
+if __name__ == "__main__":
+    albumentations_transform = A.Compose(
+        [
+            A.Resize(256, 256),
+            A.RandomCrop(224, 224),
+            A.HorizontalFlip(),
+            A.Normalize(
+                mean=[0.485, 0.456, 0.406],
+                std=[0.229, 0.224, 0.225],
+            ),
+            ToTensorV2(),
+        ]
+    )
 
     albumentations_dataset = ImageClassificationDataset(
-        file_paths=['./images/image_1.jpg', './images/image_2.jpg', './images/image_3.jpg'],
+        file_paths=[
+            "./images/image_1.jpg",
+            "./images/image_2.jpg",
+            "./images/image_3.jpg",
+        ],
         labels=[1, 2, 3],
         transform=albumentations_transform,
     )

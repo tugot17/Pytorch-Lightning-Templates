@@ -13,7 +13,11 @@ class BasedDataloader(pl.LightningDataModule):
         self.val_set = ...
 
     def train_dataloader(self):
-        return DataLoader(self.train_set, batch_size=self.batch_size, shuffle=True, num_workers=4)
+        return DataLoader(
+            self.train_set, batch_size=self.batch_size, shuffle=True, num_workers=4
+        )
 
     def val_dataloader(self):
-        return DataLoader(self.val_set, batch_size=self.batch_size, shuffle=False, num_workers=4)
+        return DataLoader(
+            self.val_set, batch_size=self.batch_size, shuffle=False, num_workers=4
+        )

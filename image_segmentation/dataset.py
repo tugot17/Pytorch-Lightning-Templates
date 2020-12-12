@@ -3,8 +3,9 @@ import os
 from torch.utils.data import Dataset
 import numpy as np
 
+
 def preprocess_mask(mask):
-    #segmentate "object" vs background
+    # segmentate "object" vs background
     mask = mask.astype(np.float32)
     mask[mask == 2.0] = 0.0
     mask[(mask == 1.0) | (mask == 3.0)] = 1.0
@@ -12,8 +13,8 @@ def preprocess_mask(mask):
 
 
 class ImageSegmentationDataset(Dataset):
-    #https://github.com/qubvel/segmentation_models.pytorch/blob/master/examples/cars%20segmentation%20(camvid).ipynb
-    
+    # https://github.com/qubvel/segmentation_models.pytorch/blob/master/examples/cars%20segmentation%20(camvid).ipynb
+
     # CLASSES = ['sky', 'building', 'pole', 'road', 'pavement',
     #            'tree', 'signsymbol', 'fence', 'car',
     #            'pedestrian', 'bicyclist', 'unlabelled']
@@ -21,11 +22,11 @@ class ImageSegmentationDataset(Dataset):
     CLASSES = ["pet"]
 
     def __init__(
-            self,
-            images_dir,
-            masks_dir,
-            classes=None,
-            augmentation=None,
+        self,
+        images_dir,
+        masks_dir,
+        classes=None,
+        augmentation=None,
     ):
         self.ids = os.listdir(images_dir)
         self.images_fps = [os.path.join(images_dir, image_id) for image_id in self.ids]

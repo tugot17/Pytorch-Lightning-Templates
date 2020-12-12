@@ -27,5 +27,5 @@ class MultiLabelImageClassificationDataset(Dataset):
 
         if self.transform:
             augmented = self.transform(image=image)
-            image = augmented['image']
+            image = augmented["image"]
         return image, label

@@ -7,13 +7,15 @@ import pytorch_lightning as pl
 
 from optimizers.over9000 import RangerLars
 
+
 def weighted_binary_cross_entropy(output, target, weights=None):
-    output = torch.clamp(output,min=1e-8,max=1-1e-8)
+    output = torch.clamp(output, min=1e-8, max=1 - 1e-8)
 
     if weights is not None:
         assert len(weights) == 2
-        loss = weights[1] * (target * torch.log(output)) + \
-               weights[0] * ((1 - target) * torch.log(1 - output))
+        loss = weights[1] * (target * torch.log(output)) + weights[0] * (
+            (1 - target) * torch.log(1 - output)
+        )
     else:
         loss = target * torch.log(output) + (1 - target) * torch.log(1 - output)
 
@@ -54,9 +56,9 @@ class MultiLabelImageClassifier(pl.LightningModule):
 
         loss = self.criterion(logits, y)
 
-        tensorboard_logs = {'train_loss': loss}
+        tensorboard_logs = {"train_loss": loss}
 
-        return {'loss': loss, 'log': tensorboard_logs}
+        return {"loss": loss, "log": tensorboard_logs}
 
     def validation_step(self, batch, batch_idx):
         x, y = batch
@@ -64,16 +66,20 @@ class MultiLabelImageClassifier(pl.LightningModule):
 
         loss = self.criterion(logits, y)
 
-        metrics_dict = {f"val_{name}": metric(logits, y) for name, metric in self.metrics.items()}
+        metrics_dict = {
+            f"val_{name}": metric(logits, y) for name, metric in self.metrics.items()
+        }
 
         return {**{"val_loss": loss}, **metrics_dict}
 
     def validation_epoch_end(self, outputs):
         avg_loss = torch.stack([x["val_loss"] for x in outputs]).mean()
 
-        tensorboard_logs = {name: torch.stack([x[f"val_{name}"] for x in outputs]).mean()
-                            for name, metric in self.metrics.items()}
+        tensorboard_logs = {
+            name: torch.stack([x[f"val_{name}"] for x in outputs]).mean()
+            for name, metric in self.metrics.items()
+        }
 
         tensorboard_logs["val_loss"] = avg_loss
 
-        return {'avg_val_loss': avg_loss, 'log': tensorboard_logs}
+        return {"avg_val_loss": avg_loss, "log": tensorboard_logs}

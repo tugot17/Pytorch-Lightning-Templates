@@ -8,7 +8,7 @@ class ArtifactParser(parsers.FasterRCNN, parsers.FilepathMixin, parsers.SizeMixi
     def __init__(self, df):
         self.df = df
         self.imageid_map = IDMap()
-        self.class_map = ClassMap(['Port', 'Necklace', 'Endo', 'ICD'])
+        self.class_map = ClassMap(["Port", "Necklace", "Endo", "ICD"])
 
     def __iter__(self):
         yield from self.df.itertuples()
