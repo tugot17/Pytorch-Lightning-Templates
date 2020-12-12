@@ -1,21 +1,22 @@
-import torch
-from pytorch_lightning.metrics import Recall, Accuracy
-from torch.optim import lr_scheduler
+from pytorch_lightning.metrics import Accuracy, Precision, Recall
+from torch.optim import Adam, lr_scheduler
 from torch import nn
 import torchvision.models as models
 import pytorch_lightning as pl
-
-from optimizers.over9000 import RangerLars
 
 
 class ImageClassifier(pl.LightningModule):
     lr = 1e-3
 
-    def __init__(self):
+    def __init__(self, num_classes):
         super().__init__()
 
         self.criterion = nn.CrossEntropyLoss()
-        self.metrics = {"accuracy": Accuracy(), "recall": Recall()}
+        self.metrics = {
+            "accuracy": Accuracy(),
+            "recall_macro": Recall(num_classes=num_classes, average="macro"),
+            "precision_macro": Precision(num_classes=num_classes, average="macro"),
+        }
 
         self.model = models.resnet50(pretrained=True)
 
@@ -24,14 +25,14 @@ class ImageClassifier(pl.LightningModule):
         #     p.requires_grad = False
 
         self.num_ftrs = self.model.fc.in_features
-        self.number_of_classes = 2
-        self.model.fc = nn.Linear(self.num_ftrs, self.number_of_classes)
+        self.num_classes = num_classes
+        self.model.fc = nn.Linear(self.num_ftrs, self.num_classes)
 
     def forward(self, x):
         return self.model(x)
 
     def configure_optimizers(self):
-        optimizer = RangerLars(self.parameters(), self.lr)
+        optimizer = Adam(self.parameters(), self.lr)
         scheduler = lr_scheduler.StepLR(optimizer, step_size=7, gamma=0.1)
 
         return [optimizer], [scheduler]
@@ -42,9 +43,9 @@ class ImageClassifier(pl.LightningModule):
 
         loss = self.criterion(logits, y)
 
-        tensorboard_logs = {"train_loss": loss}
+        self.log("train/loss", loss)
 
-        return {"loss": loss, "log": tensorboard_logs}
+        return loss
 
     def validation_step(self, batch, batch_idx):
         x, y = batch
@@ -53,19 +54,10 @@ class ImageClassifier(pl.LightningModule):
         loss = self.criterion(logits, y)
 
         metrics_dict = {
-            f"val_{name}": metric(logits, y) for name, metric in self.metrics.items()
-        }
-
-        return {**{"val_loss": loss}, **metrics_dict}
-
-    def validation_epoch_end(self, outputs):
-        avg_loss = torch.stack([x["val_loss"] for x in outputs]).mean()
-
-        tensorboard_logs = {
-            name: torch.stack([x[f"val_{name}"] for x in outputs]).mean()
+            f"val/{name}": metric.to(self.device)(logits, y)
             for name, metric in self.metrics.items()
         }
 
-        tensorboard_logs["val_loss"] = avg_loss
+        self.log_dict({**{"val/loss": loss}, **metrics_dict})
 
-        return {"avg_val_loss": avg_loss, "log": tensorboard_logs}
+        return loss
