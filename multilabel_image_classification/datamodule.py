@@ -1,8 +1,9 @@
 from os.path import join, dirname, realpath
 import pytorch_lightning as pl
 from torch.utils.data import DataLoader
-from multilabel_image_classification.dataset import MultiLabelImageClassificationDataset
+from .dataset import MultiLabelImageClassificationDataset
 import pandas as pd
+
 
 class MultiLabelImageClassificationDatamodule(pl.LightningDataModule):
     def __init__(self, batch_size, train_transform, val_transform):
@@ -29,7 +30,11 @@ class MultiLabelImageClassificationDatamodule(pl.LightningDataModule):
         )
 
     def train_dataloader(self):
-        return DataLoader(self.train_set, batch_size=self.batch_size, shuffle=True, num_workers=4)
+        return DataLoader(
+            self.train_set, batch_size=self.batch_size, shuffle=True, num_workers=4
+        )
 
     def val_dataloader(self):
-        return DataLoader(self.val_set, batch_size=self.batch_size, shuffle=False, num_workers=4)
+        return DataLoader(
+            self.val_set, batch_size=self.batch_size, shuffle=False, num_workers=4
+        )
