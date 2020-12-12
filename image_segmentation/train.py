@@ -3,7 +3,8 @@ import os
 import pytorch_lightning as pl
 from pytorch_lightning import Trainer
 from pytorch_lightning.callbacks import ModelCheckpoint
-from pytorch_lightning.loggers import TensorBoardLogger
+from pytorch_lightning.callbacks.early_stopping import EarlyStopping
+from pytorch_lightning.loggers import WandbLogger
 
 import albumentations as A
 from albumentations.pytorch import ToTensorV2
@@ -45,28 +46,30 @@ if __name__ == "__main__":
         gpus=1, fast_dev_run=True, checkpoint_callback=False, logger=False
     )
 
+
     checkpoint_callback = ModelCheckpoint(
         filepath=os.getcwd(),
-        save_top_k=1,
+        save_top_k=2,
         verbose=True,
-        monitor="val_loss",
+        monitor="val/loss",
         mode="min",
     )
 
-    TENSORBOARD_DIRECTORY = "logs/"
-    EXPERIMENT_NAME = "Unet_resnet50"
-    logger = TensorBoardLogger(TENSORBOARD_DIRECTORY, name=EXPERIMENT_NAME)
+    experiment_name = ...
+    PROJECT_NAME = ...
+
+    logger = WandbLogger(name=experiment_name, project=PROJECT_NAME)
 
     # And then actual training
+    pl.seed_everything(42)
     trainer = Trainer(
         max_epochs=40,
         logger=logger,
         gpus=1,
         # precision=16,
-        accumulate_grad_batches=4,
         deterministic=True,
-        early_stop_callback=True,
-        checkpoint_callback=checkpoint_callback,
+        accumulate_grad_batches=2,
+        callbacks=[EarlyStopping(monitor="val/loss")],
         # resume_from_checkpoint = 'my_checkpoint.ckpt'
     )
 
