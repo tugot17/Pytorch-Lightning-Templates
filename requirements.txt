@@ -3,7 +3,7 @@ efficientnet-pytorch==0.7.0
 icevision==0.1.1rc2
 matplotlib==3.3.0
 monai==0.2.0
-numpy==1.18.5
+numpy==1.22.0
 opencv-python==4.3.0.36
 pytorch-lightning==0.9.1rc1
 segmentation-models-pytorch==0.1.0
